@@ -1,78 +1,63 @@
-# Shopify App Template - Extension only
+# Maximum Shipping Rate — Shopify Function App
 
-This is a template for building an [extension-only Shopify app](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app). It contains the basics for building a Shopify app that uses only app extensions.
+A Shopify extension-only app that caps the shipping cost charged at checkout. When Shopify combines multiple shipping profiles into a single delivery cost, this function discounts any amount above a configurable maximum — so customers are never overcharged.
 
-This template doesn't include a server or the ability to embed a page in the Shopify Admin. If you want either of these capabilities, choose the [Remix app template](https://github.com/Shopify/shopify-app-template-remix) instead.
+## How it works
 
-Whether you choose to use this template or another one, you can use your preferred package manager and the Shopify CLI with [these steps](#installing-the-template).
+1. The merchant creates an automatic shipping discount using the **Maximum Shipping Rate** function.
+2. In the discount settings UI, they set the maximum shipping rate (e.g. £15.00).
+3. At checkout, if the calculated shipping exceeds that cap, the excess is automatically discounted away.
+4. The discount appears at checkout as **"Optimal shipping fee"**.
 
-## Benefits
+## Project structure
 
-Shopify apps are built on a variety of Shopify tools to create a great merchant experience. The [create an app](https://shopify.dev/docs/apps/getting-started/create) tutorial in our developer documentation will guide you through creating a Shopify app.
+```
+extensions/
+  highest-shipping-rate/   # Shopify Function (TypeScript → WASM)
+    src/run.ts             # Core discount logic
+    src/run.graphql        # Input query (reads cart + discount config)
+    locales/               # Extension display name / description
+  discount-settings/       # Admin UI Extension (React)
+    src/DiscountFunctionSettings.jsx  # Settings form shown in Shopify admin
+shopify.app.toml           # App config, metafield definition
+```
 
-This app template does little more than install the CLI and scaffold a repository.
+## Requirements
+
+- [Node.js](https://nodejs.org/en/download/)
+- [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
+- A [Shopify Partner account](https://partners.shopify.com/signup)
+- A development store or Shopify Plus sandbox
 
 ## Getting started
 
-### Requirements
-
-1. You must [download and install Node.js](https://nodejs.org/en/download/) if you don't already have it.
-1. You must [create a Shopify partner account](https://partners.shopify.com/signup) if you don’t have one.
-1. You must create a store for testing if you don't have one, either a [development store](https://help.shopify.com/en/partners/dashboard/development-stores#create-a-development-store) or a [Shopify Plus sandbox store](https://help.shopify.com/en/partners/dashboard/managing-stores/plus-sandbox-store).
-
-### Installing the template
-
-This template can be installed using your preferred package manager:
-
-Using yarn:
+Install dependencies:
 
 ```shell
-yarn create @shopify/app
+npm install
 ```
 
-Using npm:
+Start local development:
 
 ```shell
-npm init @shopify/app@latest
+shopify app dev
 ```
 
-Using pnpm:
+Deploy to production:
 
 ```shell
-pnpm create @shopify/app@latest
+shopify app deploy
 ```
 
-This will clone the template and install the required dependencies.
+## Configuration
 
-#### Local Development
+When creating a discount in the Shopify admin, the settings panel lets you enter a **Maximum shipping rate (£)**. This value is stored as a JSON metafield on the discount and read by the function at checkout.
 
-[The Shopify CLI](https://shopify.dev/docs/apps/tools/cli) connects to an app in your Partners dashboard. It provides environment variables and runs commands in parallel.
-
-You can develop locally using your preferred package manager. Run one of the following commands from the root of your app.
-
-Using yarn:
-
-```shell
-yarn dev
-```
-
-Using npm:
-
-```shell
-npm run dev
-```
-
-Using pnpm:
-
-```shell
-pnpm run dev
-```
-
-Open the URL generated in your console. Once you grant permission to the app, you can start development (such as generating extensions).
+If no value has been saved, the function falls back to a default of **£15.00**.
 
 ## Developer resources
 
-- [Introduction to Shopify apps](https://shopify.dev/docs/apps/getting-started)
-- [App extensions](https://shopify.dev/docs/apps/build/app-extensions)
-- [Extension only apps](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app)
+- [Shopify Functions](https://shopify.dev/docs/apps/build/functions)
+- [Delivery discount functions](https://shopify.dev/docs/api/functions/reference/shipping-discounts)
+- [Admin UI extensions](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app)
 - [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
