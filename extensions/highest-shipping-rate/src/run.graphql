@@ -1,0 +1,17 @@
+query RunInput {
+  discount {
+    metafield(namespace: "$app", key: "config") {
+      value
+    }
+  }
+  cart {
+    deliveryGroups {
+      id
+      deliveryOptions {
+        cost {
+          amount
+        }
+      }
+    }
+  }
+}

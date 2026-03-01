@@ -1,0 +1,36 @@
+{
+  "_comment": "Test input for: shopify app function run < test/run.input.json",
+  "_note": "Each product must have a custom.profile_rate metafield set to its profile's shipping rate.",
+  "cart": {
+    "deliveryGroups": [
+      {
+        "id": "gid://shopify/CartDeliveryGroup/0",
+        "deliveryOptions": [
+          {
+            "cost": { "amount": "21.0", "currencyCode": "GBP" }
+          }
+        ]
+      }
+    ],
+    "lines": [
+      {
+        "_product": "Linen Welcome Sign (Linen profile — £15)",
+        "merchandise": {
+          "__typename": "ProductVariant",
+          "product": {
+            "metafield": { "value": "15.00" }
+          }
+        }
+      },
+      {
+        "_product": "Welcome Sign - Briolette (General profile — £6)",
+        "merchandise": {
+          "__typename": "ProductVariant",
+          "product": {
+            "metafield": { "value": "6.00" }
+          }
+        }
+      }
+    ]
+  }
+}

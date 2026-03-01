@@ -1,0 +1,30 @@
+# Shopify Function Extension — Highest Shipping Rate
+#
+# This function inspects all delivery groups in the cart and applies a 100%
+# discount to every group *except* the one with the highest available rate,
+# so the customer is only charged for the most expensive single shipping rate.
+#
+# API docs: https://shopify.dev/docs/api/functions/reference/shipping-discounts
+
+api_version = "2026-01"
+
+[[extensions]]
+name        = "t:name"
+handle      = "highest-shipping-rate"
+uid = "4f3f2ce4-ba2e-3d52-34f1-a5106a871bcee1cf03c1"
+type        = "function"
+description = "t:description"
+
+[[extensions.targeting]]
+target      = "cart.delivery-options.discounts.generate.run"
+input_query = "src/run.graphql"
+export      = "run"
+
+[extensions.ui]
+handle = "discount-settings"
+
+[extensions.build]
+# The Shopify CLI compiles TypeScript → JavaScript → WASM (via Javy) automatically.
+# Leave command empty so the CLI handles the full build pipeline.
+command = ""
+path    = "dist/function.wasm"
